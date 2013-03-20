@@ -1,5 +1,16 @@
 iframe {
-  width: 600px;
-  height: 800px;
-  border: 3px solid #c0c0c0;
+  border: 3px dotted #c0c0c0;
+  -moz-transition: width 2s, height 2s;
+  -webkit-transition: width 2s, height 2s;
+  transition: width 2s, height 2s;
+}
+
+iframe.wide {
+  width: 800px;
+  height: 600px;
+}
+
+iframe.narrow {
+  width: 400px;
+  height: 600px;
 }

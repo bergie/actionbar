@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="./vendor/css/bootstrap.min.css">
   <link rel="stylesheet" href="./vendor/css/bootstrap-responsive.min.css">
   <link rel="stylesheet" href="./css/actionbar.css">
+  <script src="./vendor/js/jquery.js"></script>
 </head>
 <body>
   <div class="container">
@@ -14,9 +15,17 @@
     This project implements the necessary <a href="http://backbonejs.org">Backbone.js</a> models and views for using <a href="http://developer.android.com/design/patterns/actionbar.html">Android-style Action Bars</a> in your web applications. The system is designed to play well with Bootstrap templates, but you can also write the CSS yourself. Classes used are the same as what Bootstrap's navbars use.
     </p>
 
+    <p>
+    The source code for ActionBar.js is <a href="https://github.com/bergie/actionbar">on GitHub</a>.
+    </p>
+
     <h2>Example</h2>
 
-    <iframe src="./example/index.html"></iframe>
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-style="wide">Desktop</a></li>
+      <li><a data-style="narrow">Phone</a></li>
+    </ul>
+    <iframe src="./example/index.html" class="wide"></iframe>
 
     <h2>Dependencies</h2>
 
@@ -79,4 +88,20 @@
       label: 'Remove'
     });</pre>
   </div>
+  <script>
+    $(document).ready(function () {
+      $('.nav-tabs li a').click(function(event) {
+        event.preventDefault();
+        var className = $(this).attr('data-style');
+        if (className === 'narrow') {
+          $('iframe').removeClass('wide').addClass('narrow');
+        }
+        if (className === 'wide') {
+          $('iframe').removeClass('narrow').addClass('wide');
+        }
+        $('.nav-tabs li').removeClass('active');
+        $(this).parent().addClass('active');
+      });
+    });
+  </script>
 </body>
