@@ -105,8 +105,6 @@ var CollectionView = Backbone.View.extend({
    
     if (this.selected.length > 1) {
       this.contextBar.get('actions').get('copy').set('disabled', true);
-    } else {
-      this.contextBar.get('actions').get('copy').set('disabled', false);
     }
   },
 
@@ -126,6 +124,10 @@ var CollectionView = Backbone.View.extend({
       return;
     }
     this.contextBar.get('control').set('label', this.selected.length + ' selected');
+
+    if (this.selected.length === 1) {
+      this.contextBar.get('actions').get('copy').set('disabled', false);
+    }
   },
 
   addNew: function () {
