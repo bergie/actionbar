@@ -29,22 +29,41 @@ var CollectionView = Backbone.View.extend({
   prepareActionBar: function () {
     this.actionBar = new ActionBar({
       control: {
-          icon: 'gift',
+        icon: 'briefcase',
         label: 'Messages'
+      },
+      actions: [
+        {
+          id: 'add',
+          icon: 'plus',
+          label: 'Add new',
+          action: this.addNew
+        }
+      ]
+    }, this);
+  },
+
+  prepareContextBar: function () {
+    this.contextBar = new ContextBar({
+      control: {
+        label: '1 selected',
+        icon: 'ok'
       },
       actions: [
         {
           id: 'copy',
           icon: 'copy',
-          label: 'Copy'
+          label: 'Copy',
+          action: this.copySelected
         },
         {
-          id: 'paste',
-          icon: 'paste',
-          label: 'Paste'
+          id: 'remove',
+          icon: 'trash',
+          label: 'Remove',
+          action: this.removeSelected
         }
       ]
-    });
+    }, this);
   },
 
   renderActionBar: function () {
@@ -73,27 +92,6 @@ var CollectionView = Backbone.View.extend({
 
     this.views[item.cid].$el.remove();
     delete this.views[item.cid];
-  },
-
-  prepareContextBar: function () {
-    this.contextBar = new ContextBar({
-      control: {
-        label: '1 selected',
-        icon: 'ok'
-      },
-      actions: [
-        {
-          id: 'copy',
-          icon: 'copy',
-          label: 'Copy'
-        },
-        {
-          id: 'remove',
-          icon: 'trash',
-          label: 'Remove'
-        }
-      ]
-    });
   },
 
   selectItem: function (item) {
@@ -128,6 +126,26 @@ var CollectionView = Backbone.View.extend({
       return;
     }
     this.contextBar.get('control').set('label', this.selected.length + ' selected');
+  },
+
+  addNew: function () {
+    this.collection.add({
+      title: 'New item'
+    });
+  },
+
+  copySelected: function () {
+    this.collection.add(this.selected[0].toJSON());
+  },
+
+  removeSelected: function () {
+    _.each(this.selected, function (item) {
+      this.collection.remove(item);
+    }, this);
+    this.selected = [];
+    this.contextBar.hide();
+    this.contextBar = null;
+    this.renderActionBar();
   }
 });
 

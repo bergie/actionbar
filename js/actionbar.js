@@ -23,6 +23,7 @@
 
   var ActionBar = Backbone.Model.extend({
     view: null,
+    context: null,
 
     defaults: {
       control: null,
@@ -30,15 +31,17 @@
       overflow: null
     },
 
-    initialize: function () {
+    initialize: function (attributes, context) {
       ensure(this.attributes, 'control', ActionItem);
       ensure(this.attributes, 'actions', ActionList);
       ensure(this.attributes, 'overflow', ActionList);
+      this.context = context;
     },
 
     render: function () {
-       this.view = new ActionBarView({
-        model: this
+      this.view = new ActionBarView({
+        model: this,
+        context: this.context
       });
       return this.view.render().el;
     },
@@ -59,20 +62,23 @@
 
   var ContextBar = Backbone.Model.extend({
     view: null,
+    context: null,
 
     defaults: {
       control: null,
       actions: null
     },
 
-    initialize: function () {
+    initialize: function (attributes, context) {
       ensure(this.attributes, 'control', ActionItem);
       ensure(this.attributes, 'actions', ActionList);
+      this.context = context;
     },
 
     render: function () {
       this.view = new ContextBarView({
-        model: this
+        model: this,
+        context: this.context
       });
       return this.view.render().el;
     },
@@ -98,9 +104,11 @@
     $inner: null,
     $control: null,
     $actions: null,
+    context: null,
 
-    initialize: function () {
+    initialize: function (options) {
       this.listenTo(this.model.get('control'), 'change', this.renderControl);
+      this.context = options.context;
     },
 
     render: function () {
@@ -136,7 +144,8 @@
         return;
       }
       var view = new ActionListView({
-        collection: this.model.get('actions')
+        collection: this.model.get('actions'),
+        context: this.context
       });
       this.$inner.append(view.render().$el);
       this.$actions = view.$el;
@@ -153,9 +162,11 @@
     $inner: null,
     $control: null,
     $actions: null,
+    context: null,
 
-    initialize: function () {
+    initialize: function (options) {
       this.listenTo(this.model.get('control'), 'change', this.renderControl);
+      this.context = options.context;
     },
 
     render: function () {
@@ -190,7 +201,8 @@
         return;
       }
       var view = new ActionListView({
-        collection: this.model.get('actions')
+        collection: this.model.get('actions'),
+        context: this.context
       });
       this.$inner.append(view.render().$el);
       this.$actions = view.$el;
@@ -201,9 +213,11 @@
     tagName: 'ul',
     className: 'nav pull-right',
     views: {},
+    context: null,
 
     initialize: function (options) {
       this.collection = options.collection;
+      this.context = options.context;
       this.listenTo(this.collection, 'add', this.addItem);
       this.listenTo(this.collection, 'remove', this.removeItem);
       this.listenTo(this.collection, 'reset', this.render);
@@ -217,7 +231,8 @@
 
     addItem: function (action) {
       var view = new ActionItemView({
-        model: action
+        model: action,
+        context: this.context
       });
       this.$el.append(view.render().el);
       this.views[action.cid] = view;
@@ -236,9 +251,26 @@
   var ActionItemView = Backbone.View.extend({
     tagName: 'li',
     template: '<a></a>',
+    context: null,
+
+    events: {
+      'click': 'handleClick'
+    },
     
-    initialize: function () {
+    initialize: function (options) {
+      this.context = options.context;
       this.listenTo(this.model, 'change', this.render);
+    },
+
+    handleClick: function (event) {
+      event.preventDefault();
+      if (this.model.get('disabled')) {
+        return;
+      }
+      if (!this.model.get('action')) {
+        return;
+      }
+      this.model.get('action').call(this.context);
     },
 
     render: function () {
