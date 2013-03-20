@@ -1,7 +1,7 @@
 $(document).ready(function () {
   var actionBar = new ActionBar({
     control: {
-      icon: 'twitter',
+      icon: 'gift',
       label: 'Messages'
     },
     actions: [

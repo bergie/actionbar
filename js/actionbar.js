@@ -94,7 +94,7 @@
         this.$control.append(Backbone.$('<i class="icon-' + icon + '"></i>'));
       }
       if (label) {
-        this.$control.append(label);
+        this.$control.append(' ' + label);
       }
     },
 
