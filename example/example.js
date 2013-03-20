@@ -8,6 +8,7 @@ var CollectionView = Backbone.View.extend({
   className: 'thumbnails',
   views: {},
   selected: [],
+  actionBar: null,
   contextBar: null,
 
   initialize: function (options) {
@@ -15,12 +16,39 @@ var CollectionView = Backbone.View.extend({
     this.listenTo(this.collection, 'add', this.addItem);
     this.listenTo(this.collection, 'remove', this.removeItem);
     this.listenTo(this.collection, 'reset', this.render);
+    this.prepareActionBar();
   },
 
   render: function () {
     this.views = {};
     this.collection.each(this.addItem, this);
+    this.renderActionBar();
     return this;
+  },
+
+  prepareActionBar: function () {
+    this.actionBar = new ActionBar({
+      control: {
+          icon: 'gift',
+        label: 'Messages'
+      },
+      actions: [
+        {
+          id: 'copy',
+          icon: 'copy',
+          label: 'Copy'
+        },
+        {
+          id: 'paste',
+          icon: 'paste',
+          label: 'Paste'
+        }
+      ]
+    });
+  },
+
+  renderActionBar: function () {
+   this.actionBar.show();
   },
 
   addItem: function (item) {
@@ -68,6 +96,7 @@ var CollectionView = Backbone.View.extend({
           }
         ]
       });
+      this.actionBar.hide();
       this.contextBar.show();
     }
     this.contextBar.get('control').set('label', this.selected.length + ' selected');
@@ -85,6 +114,7 @@ var CollectionView = Backbone.View.extend({
     if (this.selected.length === 0) {
       this.contextBar.hide();
       this.contextBar = null;
+      this.renderActionBar();
       return;
     }
     this.contextBar.get('control').set('label', this.selected.length + ' selected');
@@ -147,23 +177,4 @@ $(document).ready(function () {
   });
   $('.container').append(myView.render().el);
 
-  var actionBar = new ActionBar({
-    control: {
-      icon: 'gift',
-      label: 'Messages'
-    },
-    actions: [
-      {
-        id: 'copy',
-        icon: 'copy',
-        label: 'Copy'
-      },
-      {
-        id: 'paste',
-        icon: 'paste',
-        label: 'Paste'
-      }
-    ]
-  });
-  actionBar.show();
 });
