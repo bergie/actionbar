@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <title>Actionbar for Backbone.js</title>
+  <title>ActionBar.js for Backbone</title>
   <link rel="stylesheet" href="./vendor/css/bootstrap.min.css">
   <link rel="stylesheet" href="./vendor/css/bootstrap-responsive.min.css">
   <link rel="stylesheet" href="./css/example.css">
 </head>
 <body>
   <div class="container">
-    <h1>Actionbar for Backbone.js</h1>
+    <h1>ActionBar.js for Backbone</h1>
 
     <p>
-    This project implements the necessary <a href="http://backbonejs.org">Backbone.js</a> models and views for using Android-style Action Bars in your web applications. The system is designed to play well with Bootstrap templates, but you can also write the CSS yourself. Classes used are the same as what Bootstrap's navbars use.
+    This project implements the necessary <a href="http://backbonejs.org">Backbone.js</a> models and views for using <a href="http://developer.android.com/design/patterns/actionbar.html">Android-style Action Bars</a> in your web applications. The system is designed to play well with Bootstrap templates, but you can also write the CSS yourself. Classes used are the same as what Bootstrap's navbars use.
     </p>
 
     <h2>Example</h2>
@@ -26,5 +26,57 @@
       <li>Font Awesome</li>
       <li>Optionally, Bootstrap</li>
     </ul>
+
+    <h2>Basic usage</h2>
+
+    <p>First you'll need to prepare an action bar instance with a <em>view control</em> and a set of <em>actions</em>:</p>
+
+    <pre>
+    var myBar = new ActionBar({
+      control: {
+        icon: 'gift',
+        label: 'Hello World'
+      },
+      actions: [
+        {
+          id: 'copy',
+          icon: 'copy',
+          label: 'Copy'
+        },
+        {
+          id: 'paste',
+          icon: 'paste',
+          label: 'Paste
+        }
+      ]
+    });</pre>
+
+    <p>
+    Then simply render it:
+    </p>
+
+    <pre>
+    myBar.show();</pre>
+
+    <p>If you need more control of where in your DOM the action bar will be placed, then use the
+    <code>render</code> function instead of <code>show</code>. The render function returns a DOM element
+    containing the toolbar.
+
+    <h3>Modifying actions</h3>
+
+    <p>After instantiation, the actions are regular Backbone collections and models, with views
+    listening to their changes. This means you can easily change them at any point:
+    </p>
+
+    <pre>
+    // Disable pasting
+    myBar.get('actions').get('paste').set('disabled', true);
+
+    // Add new action
+    myBar.get('actions').add({
+      id: 'remove',
+      icon: 'trash',
+      label: 'Remove'
+    });</pre>
   </div>
 </body>
