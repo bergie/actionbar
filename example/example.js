@@ -75,31 +75,41 @@ var CollectionView = Backbone.View.extend({
     delete this.views[item.cid];
   },
 
+  prepareContextBar: function () {
+    this.contextBar = new ContextBar({
+      control: {
+        label: '1 selected',
+        icon: 'ok'
+      },
+      actions: [
+        {
+          id: 'copy',
+          icon: 'copy',
+          label: 'Copy'
+        },
+        {
+          id: 'remove',
+          icon: 'trash',
+          label: 'Remove'
+        }
+      ]
+    });
+  },
+
   selectItem: function (item) {
     this.selected.push(item);
     if (!this.contextBar) {
-      this.contextBar = new ContextBar({
-        control: {
-          label: '1 selected',
-          icon: 'ok'
-        },
-        actions: [
-          {
-            id: 'copy',
-            icon: 'copy',
-            label: 'Copy'
-          },
-          {
-            id: 'remove',
-            icon: 'trash',
-            label: 'Remove'
-          }
-        ]
-      });
+      this.prepareContextBar();
       this.actionBar.hide();
       this.contextBar.show();
     }
     this.contextBar.get('control').set('label', this.selected.length + ' selected');
+   
+    if (this.selected.length > 1) {
+      this.contextBar.get('actions').get('copy').set('disabled', true);
+    } else {
+      this.contextBar.get('actions').get('copy').set('disabled', false);
+    }
   },
 
   unselectItem: function (item) {

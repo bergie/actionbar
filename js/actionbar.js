@@ -220,16 +220,16 @@
         model: action
       });
       this.$el.append(view.render().el);
-      this.views[action.id] = view;
+      this.views[action.cid] = view;
     },
 
     removeItem: function (action) {
-      if (!this.views[action.id]) {
+      if (!this.views[action.cid]) {
         return;
       }
 
-      this.views[action.id].$el.remove();
-      delete this.views[action.id];
+      this.views[action.cid].$el.remove();
+      delete this.views[action.cid];
     }
   });
 
@@ -245,6 +245,12 @@
       this.$el.html(this.template);
       var $btn = Backbone.$('a', this.$el);
       $btn.append(Backbone.$('<i class="icon-' + this.model.get('icon') + '"></i>'));
+
+      if (this.model.get('disabled')) {
+        this.$el.addClass('disabled');
+      } else {
+        this.$el.removeClass('disabled');
+      }
       return this;
     }
   });
