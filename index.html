@@ -42,31 +42,31 @@
     <p>First you'll need to prepare an action bar instance with a <em>view control</em> and a set of <em>actions</em>:</p>
 
     <pre>
-    var myBar = new ActionBar({
-      control: {
-        icon: 'gift',
-        label: 'Hello World'
-      },
-      actions: [
-        {
-          id: 'copy',
-          icon: 'copy',
-          label: 'Copy'
-        },
-        {
-          id: 'paste',
-          icon: 'paste',
-          label: 'Paste
-        }
-      ]
-    });</pre>
+var myBar = new ActionBar({
+  control: {
+    icon: 'gift',
+    label: 'Hello World'
+  },
+  actions: [
+    {
+      id: 'copy',
+      icon: 'copy',
+      label: 'Copy'
+    },
+    {
+      id: 'paste',
+      icon: 'paste',
+      label: 'Paste
+    }
+  ]
+});</pre>
 
     <p>
     Then simply render it:
     </p>
 
     <pre>
-    myBar.show();</pre>
+myBar.show();</pre>
 
     <p>If you need more control of where in your DOM the action bar will be placed, then use the
     <code>render</code> function instead of <code>show</code>. The render function returns a DOM element
@@ -79,15 +79,15 @@
     </p>
 
     <pre>
-    // Disable pasting
-    myBar.get('actions').get('paste').set('disabled', true);
+// Disable pasting
+myBar.get('actions').get('paste').set('disabled', true);
 
-    // Add new action
-    myBar.get('actions').add({
-      id: 'remove',
-      icon: 'trash',
-      label: 'Remove'
-    });</pre>
+// Add new action
+myBar.get('actions').add({
+  id: 'remove',
+  icon: 'trash',
+  label: 'Remove'
+});</pre>
   </div>
   <script>
     $(document).ready(function () {
