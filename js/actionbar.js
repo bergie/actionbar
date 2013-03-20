@@ -22,6 +22,8 @@
   });
 
   var ActionBar = Backbone.Model.extend({
+    view: null,
+
     defaults: {
       control: null,
       actions: null,
@@ -35,26 +37,57 @@
     },
 
     render: function () {
-      var view = new ActionBarView({
+       this.view = new ActionBarView({
         model: this
       });
-      return view.render().el;
+      return this.view.render().el;
     },
 
     show: function () {
       var bar = this.render();
       Backbone.$('body').prepend(bar);
+    },
+
+    hide: function () {
+      if (!this.view) {
+        return;
+      }
+      this.view.$el.remove();
+      this.view = null;
     }
   });
 
   var ContextBar = Backbone.Model.extend({
+    view: null,
+
     defaults: {
       control: null,
       actions: null
     },
+
     initialize: function () {
       ensure(this.attributes, 'control', ActionItem);
       ensure(this.attributes, 'actions', ActionList);
+    },
+
+    render: function () {
+      this.view = new ContextBarView({
+        model: this
+      });
+      return this.view.render().el;
+    },
+
+    show: function () {
+      var bar = this.render();
+      Backbone.$('body').prepend(bar);
+    },
+
+    hide: function () {
+      if (!this.view) {
+        return;
+      }
+      this.view.$el.remove();
+      this.view = null;
     }
   });
 
@@ -113,6 +146,57 @@
     }
   });
 
+  var ContextBarView = Backbone.View.extend({
+    tagName: 'div',
+    className: 'navbar navbar-inverse navbar-fixed-top',
+    template: '<div class="navbar-inner"></div>',
+    $inner: null,
+    $control: null,
+    $actions: null,
+
+    initialize: function () {
+      this.listenTo(this.model.get('control'), 'change', this.renderControl);
+    },
+
+    render: function () {
+      this.$el.html(this.template);
+      this.$inner = Backbone.$('.navbar-inner', this.$el);
+      this.$control = null;
+      this.$actions = null;
+      this.renderControl();
+      this.renderActions();
+      return this;
+    },
+
+    renderControl: function () {
+      if (!this.$control) {
+        this.$control = Backbone.$('<a>');
+        this.$control.addClass('brand');
+        this.$inner.prepend(this.$control);
+      }
+      var icon = this.model.get('control').get('icon');
+      var label = this.model.get('control').get('label');
+      this.$control.empty();
+      if (icon) {
+        this.$control.append(Backbone.$('<i class="icon-' + icon + '"></i>'));
+      }
+      if (label) {
+        this.$control.append(' ' + label);
+      }
+    },
+
+    renderActions: function () {
+      if (this.$actions) {
+        return;
+      }
+      var view = new ActionListView({
+        collection: this.model.get('actions')
+      });
+      this.$inner.append(view.render().$el);
+      this.$actions = view.$el;
+    }
+  });
+
   var ActionListView = Backbone.View.extend({
     tagName: 'ul',
     className: 'nav pull-right',
@@ -166,4 +250,5 @@
   });
 
   window.ActionBar = ActionBar;
+  window.ContextBar = ContextBar;
 })(Backbone);
