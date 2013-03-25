@@ -47,7 +47,8 @@ var CollectionView = Backbone.View.extend({
     this.contextBar = new ContextBar({
       control: {
         label: '1 selected',
-        icon: 'ok'
+        icon: 'ok',
+        action: this.unselectAll
       },
       actions: [
         {
@@ -130,6 +131,20 @@ var CollectionView = Backbone.View.extend({
     }
   },
 
+  unselectAll: function () {
+    if (this.selected.length === 0) {
+      return;
+    }
+
+    _.each(this.selected, function (item) {
+      var self = this;
+      window.setTimeout(function () {
+        self.unselectItem(item);
+      }, 0);
+    }, this);
+    Backbone.$('li.active', this.el).removeClass('active');
+  },
+
   addNew: function () {
     this.collection.add({
       title: 'New item'
@@ -158,7 +173,8 @@ var ItemView = Backbone.View.extend({
   selected: false,
 
   events: {
-    'click': 'handleSelect'
+    'click': 'handleSelect',
+    'touchstart': 'handleSelect'
   },
 
   initialize: function (options) {
