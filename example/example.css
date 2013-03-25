@@ -1,3 +1,11 @@
 ul.thumbnails li.active {
   box-shadow: 2px 2px 10px yellow;
 }
+
+div.navbar div.navbar-inner ul.nav li.disabled a {
+  color: #ffffff;
+}
+
+div.navbar-inverse div.navbar-inner ul.nav li.disabled a {
+  color: #000000;
+}

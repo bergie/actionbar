@@ -173,8 +173,7 @@ var ItemView = Backbone.View.extend({
   selected: false,
 
   events: {
-    'click': 'handleSelect',
-    'touchstart': 'handleSelect'
+    'click': 'handleSelect'
   },
 
   initialize: function (options) {
