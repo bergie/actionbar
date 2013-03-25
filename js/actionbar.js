@@ -172,13 +172,13 @@
       var label = this.model.get('control').get('label');
       this.$control.empty();
       if (up) {
-        this.$control.append(Backbone.$('<i class="control-up icon-chevron-left"></i>'));
+        this.$control.append(Backbone.$('<i class="control-up icon-chevron-left"></i><span class="control-up">&nbsp;</span>'));
       }
       if (icon) {
         this.$control.append(Backbone.$('<i class="control-icon icon-' + icon + '"></i>'));
       }
       if (label) {
-        this.$control.append('<span class="control-label"> ' + label + '</span>');
+        this.$control.append('<span class="control-label">&nbsp;' + label + '</span>');
       }
     },
 
