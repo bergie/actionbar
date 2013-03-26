@@ -28,7 +28,8 @@
     defaults: {
       control: null,
       actions: null,
-      overflow: null
+      overflow: null,
+      className: 'actionbar'
     },
 
     initialize: function (attributes, context) {
@@ -66,7 +67,8 @@
 
     defaults: {
       control: null,
-      actions: null
+      actions: null,
+      className: 'contextbar'
     },
 
     initialize: function (attributes, context) {
@@ -149,6 +151,7 @@
 
     render: function () {
       this.$el.html(this.template);
+      this.$el.addClass(this.model.get('className'));
       this.$inner = Backbone.$('.navbar-inner', this.$el);
       this.$control = null;
       this.$actions = null;
@@ -230,6 +233,7 @@
 
     render: function () {
       this.$el.html(this.template);
+      this.$el.addClass(this.model.get('className'));
       this.$inner = Backbone.$('.navbar-inner', this.$el);
       this.$control = null;
       this.$actions = null;
